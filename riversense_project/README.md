@@ -166,7 +166,7 @@ Replace the random data in `views.py` → `api_live_sensors()` with actual Influ
 ```python
 from influxdb_client import InfluxDBClient
 
-client = InfluxDBClient(url="http://localhost:8086", token="your-token", org="riversense")
+client = InfluxDBClient(url="http://localhost:8086", token="<TOKEN>", org="riversense")
 query_api = client.query_api()
 
 def get_latest_reading(station):
