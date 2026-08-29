@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard — RiverSense{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrap">
+
+<!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <a href="{% url 'home' %}" class="logo" style="font-size:1.1rem;">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M2 12c2-4 4-6 6-6s4 4 6 4 4-4 6-4"/><circle cx="12" cy="9" r="2" fill="white" stroke="none"/></svg></div>
+        RiverSense
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Overview</div>
+      <a href="{% url 'dashboard' %}" class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
+
+      <div class="sidebar-section">Monitoring</div>
+      <a href="#detections"><i class="fas fa-trash"></i> Trash Detections</a>
+      <a href="#sensors"><i class="fas fa-tint"></i> Water Quality</a>
+      <a href="#flood"><i class="fas fa-exclamation-triangle"></i> Flood Alerts</a>
+
+      <div class="sidebar-section">System</div>
+      <a href="{% url 'technology' %}"><i class="fas fa-microchip"></i> Technology</a>
+      <a href="{% url 'about' %}"><i class="fas fa-users"></i> About</a>
+      <a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact</a>
+
+      <div class="sidebar-section">Account</div>
+      <a href="/admin/"><i class="fas fa-cog"></i> Admin Panel</a>
+      <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <i class="fas fa-user-circle"></i> {{ user.username }}<br>
+      <span style="font-size:.75rem; opacity:.6;">Operator</span>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="dash-main">
+
+    <div class="dash-header">
+      <h1>River Dashboard</h1>
+      <p>
+        Real-time monitoring · YOLOv8 Detection · Water Quality
+        <span class="live-indicator" style="margin-left:1rem">
+          <div class="live-dot"></div> Live
+        </span>
+        <span class="updated-at">Connecting...</span>
+      </p>
+    </div>
+
+    <!-- ── KPIs ── -->
+    <!-- <div class="dash-kpis">
+      <div class="kpi-card kpi-teal">
+        <div class="kpi-icon" style="color:var(--teal)"><i class="fas fa-trash-alt"></i></div>
+        <div class="kpi-num">{{ total_detections }}</div>
+        <div class="kpi-label">Total Detections</div>
+      </div>
+      <div class="kpi-card kpi-blue">
+        <div class="kpi-icon" style="color:var(--blue)"><i class="fas fa-clock"></i></div>
+        <div class="kpi-num">{{ detections_24h }}</div>
+        <div class="kpi-label">Last 24 Hours</div>
+      </div>
+      <div class="kpi-card kpi-red">
+        <div class="kpi-icon" style="color:var(--red)"><i class="fas fa-exclamation-circle"></i></div>
+        <div class="kpi-num">{{ high_alerts }}</div>
+        <div class="kpi-label">Active High Alerts</div>
+      </div>
+    </div> -->
+
+    <!-- ── ROW 1: Chart + Model ── -->
+    <div class="dash-row">
+
+      <div class="dash-card">
+        <h3><i class="fas fa-chart-bar" style="color:var(--teal)"></i> Detections — Last 7 Days</h3>
+        <div class="chart-wrap">
+          <canvas id="detectChart"></canvas>
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <h3><i class="fas fa-brain" style="color:var(--blue)"></i> YOLOv8 Model Performance</h3>
+        <div class="model-metrics">
+          <div class="mm-row">
+            <div class="mm-head"><span class="mm-label">mAP@0.5</span><span class="mm-val">{{ model_map }}%</span></div>
+            <div class="mm-bar"><div class="mm-fill" style="width:{{ model_map }}%"></div></div>
+          </div>
+          <div class="mm-row">
+            <div class="mm-head"><span class="mm-label">Precision</span><span class="mm-val">{{ model_precision }}%</span></div>
+            <div class="mm-bar"><div class="mm-fill" style="width:{{ model_precision }}%"></div></div>
+          </div>
+          <div class="mm-row">
+            <div class="mm-head"><span class="mm-label">Recall</span><span class="mm-val">{{ model_recall }}%</span></div>
+            <div class="mm-bar"><div class="mm-fill" style="width:{{ model_recall }}%"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border2);">
+          <div style="font-size:.8rem; color:var(--muted); display:flex; flex-direction:column; gap:.4rem;">
+            <div style="display:flex;justify-content:space-between;"><span>Model</span><span style="color:var(--text)">YOLOv8m (yolov8m.pt)</span></div>
+            <div style="display:flex;justify-content:space-between;"><span>Parameters</span><span style="color:var(--text)">25.8M trainable</span></div>
+            <div style="display:flex;justify-content:space-between;"><span>Inference</span><span style="color:var(--teal)">&lt;50ms on GPU</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── ROW 2: Sensors + Flood ── -->
+    <div class="dash-row" id="sensors">
+
+      <div class="dash-card">
+        <h3><i class="fas fa-tint" style="color:var(--blue)"></i> Live Water Quality — All Stations</h3>
+        <div class="sensor-mini-grid">
+          {% for item in sensor_data %}
+          <div class="sensor-mini" data-mini-station="{{ item.station }}">
+            <span class="sensor-mini-label">{{ item.label }}</span>
+            <div class="sensor-mini-vals">
+              <span>pH <strong data-mini="ph" class="s-good">—</strong></span>
+              <span>WL <strong data-mini="do" class="s-good">—</strong></span>
+              <span>Turb <strong data-mini="turb">—</strong></span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <p class="updated-at" style="margin-top:.8rem">Connecting to sensors...</p>
+      </div>
+
+      <!-- <div class="dash-card" id="flood">
+        <h3><i class="fas fa-water" style="color:var(--amber)"></i> Flood Alerts</h3>
+        {% if flood_alerts %}
+          {% for alert in flood_alerts %}
+          <div class="flood-item">
+            <div class="flood-icon">
+              {% if alert.risk_level == 'emergency' %}<i class="fas fa-exclamation-circle" style="color:var(--red)"></i>
+              {% elif alert.risk_level == 'warning' %}<i class="fas fa-exclamation-triangle" style="color:var(--amber)"></i>
+              {% else %}<i class="fas fa-info-circle" style="color:var(--blue)"></i>{% endif %}
+            </div>
+            <div class="flood-info">
+              <h4>{{ alert.station }} — {{ alert.get_risk_level_display }}</h4>
+              <p>Level: {{ alert.water_level }}m · {{ alert.timestamp|date:"d M H:i" }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div style="text-align:center; padding:2rem; color:var(--muted);">
+            <i class="fas fa-check-circle" style="font-size:2rem; color:var(--teal); margin-bottom:.8rem; display:block;"></i>
+            All stations normal.<br>No active flood alerts.
+          </div>
+        {% endif %}
+      </div> -->
+      <div class="dash-card" id="weather">
+        <h3><i class="fas fa-cloud-sun" style="color:var(--amber)"></i> Weather Forecast</h3>
+
+          <div id="weather-box" style="text-align:center; padding:1rem;">
+            <h2 id="temp">--°C</h2>
+            <p id="condition">Loading...</p>
+            <p id="wind">Wind: -- km/h</p>
+          </div>
+
+          <div class="updated-at" style="margin-top:.8rem">Fetching weather...</div>
+      </div>
+    </div>
+<!-- ── DETECTIONS TABLE ── -->
+    <div class="dash-card" id="detections" style="margin-bottom:1.5rem">
+      <h3><i class="fas fa-trash" style="color:var(--red)"></i> Recent Trash Detection Events</h3>
+      {% csrf_token %}
+      <div style="overflow-x:auto">
+        <table class="event-table">
+          <thead>
+            <tr>
+              <th>Station</th>
+              <th>Alert</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for event in recent_events %}
+            <tr id="row-{{ event.id }}">
+              <td>{{ event.get_station_display }}</td>
+              <td><span class="badge badge-{{ event.trash_class }}">{{ event.get_trash_class_display }}</span></td>
+              <td>{{ event.confidence|floatformat:2 }}</td>
+              <td><span class="badge badge-{{ event.alert_level }}">{{ event.get_alert_level_display }}</span></td>
+              <td>{{ event.timestamp|date:"d M H:i" }}</td>
+              <td>
+                {% if event.resolved %}
+                  <span class="badge badge-resolved"><i class="fas fa-check"></i> Resolved</span>
+                {% else %}
+                  <span class="badge badge-medium">Open</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if not event.resolved %}
+                <button class="resolve-btn" onclick="resolveDetection({{ event.id }}, this)">Resolve</button>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7" style="color:var(--muted); text-align:center; padding:2rem;">No detection events yet. Add some via Admin panel.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const ctx = document.getElementById('detectChart');
+if (ctx) {
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ chart_labels|safe }},
+      datasets: [{
+        label: 'Detections',
+        data: {{ chart_data|safe }},
+        backgroundColor: 'rgba(0,212,164,0.25)',
+        borderColor: 'rgba(0,212,164,0.8)',
+        borderWidth: 1.5,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#8aa0bc' } },
+        y: { ticks: { color: '#8aa0bc' }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+// ✅ LIVE SENSOR FETCH FUNCTION
+function fetchSensors() {
+  fetch("/api/sensors/")
+    .then(res => res.json())
+    .then(data => {
+
+      const timeText = document.querySelectorAll('.updated-at');
+      timeText.forEach(el => el.innerText = "Updated just now");
+
+      data.stations.forEach(station => {
+        const card = document.querySelector(`[data-mini-station="${station.station}"]`);
+        if (!card) return;
+
+        // values
+        const phEl   = card.querySelector('[data-mini="ph"]');
+        const doEl   = card.querySelector('[data-mini="do"]');
+        const turbEl = card.querySelector('[data-mini="turb"]');
+
+        // set values
+        phEl.innerText   = station.ph.toFixed(1);
+        doEl.innerText   = station.dissolved_oxygen.toFixed(1);
+        turbEl.innerText = station.turbidity;
+
+        // reset classes
+        phEl.className   = '';
+        doEl.className   = '';
+        turbEl.className = '';
+
+        // apply status color
+        phEl.classList.add(`s-${station.ph_status}`);
+        doEl.classList.add(`s-${station.do_status}`);
+        turbEl.classList.add(`s-${station.turb_status}`);
+      });
+    })
+    .catch(err => console.log("Sensor fetch error:", err));
+}
+
+// ⏱️ Run every 3 seconds
+setInterval(fetchSensors, 3000);
+
+// Run immediately on load
+fetchSensors();
+
+
+// Hamburger menu
+document.querySelector('.hamburger')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+
+//weather 
+function fetchWeather() {
+  fetch("http://localhost:3000/api/weather") // 👈 your Node server
+    .then(res => res.json())
+    .then(weather => {
+
+      document.getElementById("temp").innerText = weather.temperature + "°C";
+      document.getElementById("wind").innerText = "Wind: " + weather.windspeed + " km/h";
+
+      const weatherMap = {
+        0: "Clear ☀️",
+        1: "Mainly Clear 🌤️",
+        2: "Partly Cloudy ⛅",
+        3: "Cloudy ☁️",
+        61: "Rain 🌧️"
+      };
+
+      document.getElementById("condition").innerText =
+        weatherMap[weather.weathercode] || "Unknown";
+
+    })
+    .catch(err => {
+      console.log("Frontend weather error:", err);
+    });
+}
+
+fetchWeather();
+setInterval(fetchWeather, 600000);
+</script>
+{% endblock %}

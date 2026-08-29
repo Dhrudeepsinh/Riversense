@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}RiverSense: Smart Embedded Monitoring for Urban Water bodies{% endblock %}
+
+{% block content %}
+
+<!-- ── HERO ─────────────────────────────────────────── -->
+<section class="hero">
+  <!-- <div class="hero-bg"></div> -->
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="{% static 'videos/IMG_3376.MP4' %}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="hero-grid"></div>
+
+  <h1>
+    Smart Embedded<br>
+    <span class="accent">Monitoring for Urban Water bodies</span>
+  </h1>
+
+  <p class="hero-sub">
+    Continuous, automated monitoring of India's most celebrated urban riverfront using computer vision, IoT sensors, GIS mapping and AI-powered flood prediction.
+  </p>
+
+  <div class="hero-btns">
+    {% if user.is_authenticated %}
+      <a href="{% url 'dashboard' %}" class="btn-primary"><i class="fas fa-chart-line"></i> Open Dashboard</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Login to Dashboard</a>
+    {% endif %}
+    <a href="#solution" class="btn-outline"><i class="fas fa-chevron-down"></i> Explore Solution</a>
+  </div>
+</section>
+
+<!-- ── SOLUTION ──────────────────────────────────────── -->
+<section class="section-pad" id="solution">
+  <div class="container">
+    <div class="section-label">Solution</div>
+    <div class="solution-flex">
+
+      <!-- LEFT SIDE (2x2 GRID) -->
+      <div class="solution-left">
+
+        <div class="solution-card">
+          <div class="card-icon icon-teal"><i class="fas fa-eye"></i></div>
+          <h3>Trash Detection</h3>
+          <p>Real-time floating waste detection from CCTV footage or Web cam.</p>
+        </div>
+
+        <div class="solution-card">
+          <div class="card-icon icon-blue"><i class="fas fa-tint"></i></div>
+          <h3>IoT Water Quality</h3>
+          <p>Live monitoring of pH, turbidity, water level using sensors.</p>
+        </div>
+
+        <!-- GIS moved BELOW IoT -->
+        <div class="solution-card">
+          <div class="card-icon icon-amber"><i class="fas fa-map-marked-alt"></i></div>
+          <h3>GIS Dashboard</h3>
+          <p>Interactive heatmap with GPS-tagged pollution data.</p>
+        </div>
+
+        <div class="solution-card">
+          <div class="card-icon icon-red"><i class="fas fa-exclamation-triangle"></i></div>
+          <h3>Flood Early Warning</h3>
+          <p>Predicts water level surges 72 hours ahead.</p>
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDE (MAP) -->
+      <div class="solution-map">
+        <div id="map"></div>
+
+        <!-- Floating UI card -->
+        <div class="map-card">
+          <h4>Sabarmati River</h4>
+          <p><b>Water Quality:</b> 92/100</p>
+          <p><b>Updated:</b> 2 min ago</p>
+          <button>Show Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS BAR ──────────────────────────────────────── -->
+<section class="stats-section" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-item-num" data-count="84.9" data-suffix="%">84.9%</div>
+        <div class="stat-item-label">mAP@0.5 (Best)</div>
+        <div class="stat-item-sub">Epoch 93 of 150</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item-num" data-count="96.9" data-suffix="%">96.9%</div>
+        <div class="stat-item-label">Model Precision</div>
+        <div class="stat-item-sub">Very Low False Positives</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item-num" data-count="801" data-suffix="">801</div>
+        <div class="stat-item-label">Training Images</div>
+        <div class="stat-item-sub">Augmented Dataset</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item-num" data-count="150" data-suffix="">150</div>
+        <div class="stat-item-label">Training Epochs</div>
+        <div class="stat-item-sub">Tesla T4 GPU · ~70 mins</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item-num" data-count="50" data-suffix="ms">50ms</div>
+        <div class="stat-item-label">Inference Speed</div>
+        <div class="stat-item-sub">Per Frame on GPU</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LIVE SENSOR PREVIEW ────────────────────────────── -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-label">Live Data</div>
+    <h2 class="section-title">Real-Time Water Intelligence</h2>
+    <p class="section-sub">IoT sensors at 5 stations across the Sabarmati stream live water quality data every few seconds.</p>
+
+    <div class="live-indicator" style="margin-top:1rem">
+      <div class="live-dot"></div>
+      Live — Updates every 5 seconds
+    </div>
+    <p class="updated-at">Connecting...</p>
+
+    <div class="sensors-grid" style="margin-top:1.5rem">
+      {% for station in stations_list %}
+      <div class="sensor-card" data-station="{{ station.key }}">
+        <div class="sensor-live-dot"></div>
+        <div class="sensor-station">{{ station.label }}</div>
+        <div class="sensor-params">
+          <div class="sensor-param"><span>pH</span><span class="sensor-val s-good" data-param="ph">—</span></div>
+          <div class="sensor-param"><span>Turbidity</span><span class="sensor-val" data-param="turb">—</span></div>
+          <div class="sensor-param"><span>Level</span><span class="sensor-val" data-param="wl">—</span></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── TECHNOLOGY OVERVIEW ────────────────────────────── -->
+<section class="section-pad" style="background: var(--navy2); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2);">
+  <div class="container">
+    <div class="section-label">Technology</div>
+    <h2 class="section-title">Five-Layer System Architecture</h2>
+    <p class="section-sub">Clear separation of concerns from physical data collection to end-user output — scalable, cloud-native, open-source.</p>
+
+    <div class="arch-layers" style="margin-top:2.5rem">
+      <div class="arch-layer">
+        <div class="arch-layer-num">1</div>
+        <div class="arch-layer-info">
+          <h4>Data Collection — Arduino · CCTV/Web cam · MQTT</h4>
+          <p>IoT sensors stream pH, turbidity and water level. CCTV cameras feed video frames for detection.</p>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-num">2</div>
+        <div class="arch-layer-info">
+          <h4>Data Pipeline — Node-RED · InfluxDB · AWS IoT Core</h4>
+          <p>MQTT message broker routes time-series sensor data to InfluxDB. AWS IoT Core handles cloud ingestion.</p>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-num">3</div>
+        <div class="arch-layer-info">
+          <h4>AI / ML Engine — YOLOv8m · LSTM · Python · PyTorch</h4>
+          <p>YOLOv8 detects floating trash at &lt;50ms. LSTM predicts water levels 72h ahead using weather data.</p>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-num">4</div>
+        <div class="arch-layer-info">
+          <h4>Output Systems — Django · GIS Dashboard · SMS Alerts</h4>
+          <p>Web dashboard displays live heatmaps, sensor gauges and detection events. Priority alerts via SMS.</p>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-num">5</div>
+        <div class="arch-layer-info">
+          <h4>Admin Panel — FastAPI · PostgreSQL · MongoDB</h4>
+          <p>Compliance reports, incident management, detection log and operator access control for AMC/SRFDCL.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem; text-align:center">
+      <a href="{% url 'technology' %}" class="btn-outline"><i class="fas fa-microchip"></i> Explore Full Technology Stack</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCALABILITY ────────────────────────────────────── -->
+<section class="section-pad" id="scalability">
+  <div class="container">
+    <div class="section-label">Scale</div>
+    <h2 class="section-title">Deployable Across Gujarat & India</h2>
+    <p class="section-sub">Designed city-agnostic from day one. The same trained model deploys across urban water bodies with minimal retraining.</p>
+
+    <div class="scale-grid">
+      <div class="scale-item">
+        <i class="fas fa-water"></i>
+        <h4>Kankaria Lake</h4>
+        <p>Ahmedabad · High tourist footfall, similar plastic waste profile</p>
+      </div>
+      <div class="scale-item">
+        <i class="fas fa-water"></i>
+        <h4>Vastrapur Lake</h4>
+        <p>Ahmedabad · Urban runoff, residential floating waste</p>
+      </div>
+      <div class="scale-item">
+        <i class="fas fa-water"></i>
+        <h4>Chandola Lake</h4>
+        <p>Ahmedabad · Ecological restoration candidate</p>
+      </div>
+      <div class="scale-item">
+        <i class="fas fa-stream"></i>
+        <h4>Gomti River</h4>
+        <p>Lucknow · Comparable urban riverfront context</p>
+      </div>
+      <div class="scale-item">
+        <i class="fas fa-stream"></i>
+        <h4>Sabarmati Tributaries</h4>
+        <p>Khari · Watrak · Meshwo Rivers</p>
+      </div>
+      <div class="scale-item">
+        <i class="fas fa-globe-asia"></i>
+        <h4>National Scale</h4>
+        <p>NMCG · Namami Gange · Ministry of Jal Shakti</p>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius); padding:2rem; display:flex; gap:2rem; align-items:center; flex-wrap:wrap;">
+      <div style="flex:1; min-width:240px;">
+        <h3 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:.5rem;">Aligned with National Missions</h3>
+        <p style="color:var(--muted); font-size:.9rem;">Smart Cities Mission · AMRUT 2.0 · Swachh Bharat Abhiyan · NMCG · River Cities Alliance</p>
+      </div>
+      <a href="{% url 'contact' %}" class="btn-primary"><i class="fas fa-handshake"></i> Partner With Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ────────────────────────────────────────────── -->
+<section style="background: var(--navy2); border-top: 1px solid var(--border2); padding: 5rem 5%; text-align: center;">
+  <div class="container">
+    <div class="section-label" style="justify-content:center">Get Involved</div>
+    <h2 class="section-title">Ready to Drive Clean Rivers?</h2>
+    <p class="section-sub" style="margin: 0 auto 2rem">Whether you're from AMC, SRFDCL, a research institution or an NGO — let's work together to protect the Rivers.</p>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="{% url 'contact' %}" class="btn-primary"><i class="fas fa-envelope"></i> Contact Us</a>
+      <a href="{% url 'about' %}" class="btn-outline"><i class="fas fa-users"></i> Meet the Team</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+const map = L.map('map').setView([23.0225, 72.5714], 13); // Ahmedabad
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// Example marker
+L.marker([23.0225, 72.5714]).addTo(map)
+  .bindPopup("Sabarmati Monitoring Station")
+  .openPopup();
+</script>
+<script>
+// No template filter hacks needed — station labels come pre-formatted from views.py
+</script>
+{% endblock %}

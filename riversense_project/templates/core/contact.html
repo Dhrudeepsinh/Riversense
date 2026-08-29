@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Contact — RiverSense{% endblock %}
+{% block content %}
+
+<section style="padding: 8rem 5% 4rem; background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(0,212,164,.06) 0%, transparent 70%);">
+  <div class="container">
+    <div class="section-label">Contact</div>
+    <h1 class="section-title">Get In Touch</h1>
+    <p class="section-sub">For AMC, SRFDCL, research collaborations, deployment inquiries or academic partnerships.</p>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="contact-split">
+
+      <div class="contact-info">
+        <h3>Smart Embedded Monitoring for Urban Water bodies</h3>
+        <p>This project is developed under the Department of Information Technology for the Sabarmati and is designed to scale to urban water bodies across Gujarat and India.</p>
+
+        <div class="contact-item">
+          <i class="fas fa-university"></i>
+          <p>Department of Information Technology<br>B.Tech Semester 8 · Ahmedabad, Gujarat, India</p>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-water"></i>
+          <p>Primary Deployment Site<br>Sabarmati Riverfront, Ahmedabad — 22 km stretch</p>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-handshake"></i>
+          <p>Partners & Stakeholders<br>AMC · SRFDCL · Smart Cities Mission · NMCG</p>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-code-branch"></i>
+          <p>Technology Stack<br>YOLOv8 · Django · IoT · GIS · LSTM · AWS</p>
+        </div>
+
+        <div style="margin-top:2rem; padding:1.5rem; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius);">
+          <h4 style="font-weight:600; margin-bottom:.5rem; color:var(--teal)"><i class="fas fa-star"></i> &nbsp;Research Interest</h4>
+          <p style="color:var(--muted); font-size:.88rem; line-height:1.7;">The integration of YOLOv8-based floating trash detection with GIS-tagged event logging for Indian urban riverfronts is a novel contribution with significant publication potential.</p>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <h3 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:1.5rem;">Send a Message</h3>
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="name" placeholder="Your name" required value="{{ form.name.value|default:'' }}">
+              {% if form.name.errors %}<span style="color:var(--red);font-size:.8rem;">{{ form.name.errors.0 }}</span>{% endif %}
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" name="email" placeholder="your@email.com" required value="{{ form.email.value|default:'' }}">
+              {% if form.email.errors %}<span style="color:var(--red);font-size:.8rem;">{{ form.email.errors.0 }}</span>{% endif %}
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Organization</label>
+            <input type="text" name="organization" placeholder="AMC / SRFDCL / University / NGO" value="{{ form.organization.value|default:'' }}">
+          </div>
+          <div class="form-group">
+            <label>Message *</label>
+            <textarea name="message" placeholder="Tell us about your requirements, collaboration ideas or deployment interest..." required>{{ form.message.value|default:'' }}</textarea>
+            {% if form.message.errors %}<span style="color:var(--red);font-size:.8rem;">{{ form.message.errors.0 }}</span>{% endif %}
+          </div>
+          <button type="submit" class="form-submit"><i class="fas fa-paper-plane"></i> &nbsp;Send Message</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

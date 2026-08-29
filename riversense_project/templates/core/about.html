@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}About — RiverSense{% endblock %}
+{% block content %}
+
+<section style="padding: 8rem 5% 0.5rem; background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(0,212,164,.07) 0%, transparent 70%);">
+  <div class="container">
+    <div class="section-label">About</div>
+    <h1 class="section-title">Smart Embedded Monitoring for Urban Water bodies <span class="accent">Project Team</span></h1>
+    <p class="section-sub">B.Tech Information Technology · Semester 8 · Department of IT · Ahmedabad, Gujarat, India · 2025–2026</p>
+  </div>
+</section>
+
+<!-- PROJECT OVERVIEW -->
+<section class="section-pad">
+  <div class="container">
+    <div class="tech-split">
+      <div>
+        <div class="section-label">Mission</div>
+        <h2 class="section-title" style="font-size:2rem">Why We Built RiverSense and focus on Sabarmati</h2>
+        <p style="color:var(--muted); line-height:1.8; margin-bottom:1.2rem;">
+          The Sabarmati Riverfront spans 22 kilometres of Ahmedabad's riverbank and hosts millions of visitors annually. Yet floating plastics, solid waste clusters, and sewage inflows remain a persistent challenge that conventional periodic inspections cannot address in real time.
+        </p>
+        <p style="color:var(--muted); line-height:1.8; margin-bottom:1.2rem;">
+          We identified a critical research gap: no integrated, deployable system exists specifically for Indian urban riverfronts that combines visual trash detection, IoT water quality monitoring and GIS visualisation in a single platform.
+        </p>
+        <p style="color:var(--muted); line-height:1.8;">
+          RiverSense directly aligns with India's Smart Cities Mission, AMRUT 2.0, Swachh Bharat Abhiyan and the NMCG framework — designed to scale from the Sabarmati to every river city in India.
+        </p>
+      </div>
+      <div>
+        <div class="about-timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"><i class="fas fa-search"></i></div>
+            <div class="timeline-content">
+              <h4>Problem Identification</h4>
+              <p>Surveyed Sabarmati Riverfront management gaps — waste detection, water quality, flood prediction — all addressed in isolation, never together.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"><i class="fas fa-database"></i></div>
+            <div class="timeline-content">
+              <h4>Dataset Curation</h4>
+              <p>Curated and annotated 801 training images of water surface waste using Roboflow.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"><i class="fas fa-brain"></i></div>
+            <div class="timeline-content">
+              <h4>YOLOv8 Training</h4>
+              <p>Trained YOLOv8-medium for 150 epochs on Tesla T4 GPU. Achieved mAP@0.5 = 0.849 and Precision = 0.969. No overfitting observed.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"><i class="fas fa-chart-line"></i></div>
+            <div class="timeline-content">
+              <h4>Dashboard Development</h4>
+              <p>Built full Django dashboard with live sensor data, GIS detection heatmap, user login, flood alerts and incident management.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"><i class="fas fa-rocket"></i></div>
+            <div class="timeline-content">
+              <h4>Scalability Design</h4>
+              <p>Architected for Gujarat-wide deployment — Kankaria, Vastrapur, Chandola lakes and beyond. National NMCG compatibility built in.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section-pad" style="background: var(--navy2); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2);">
+  <div class="container">
+    <div class="section-label text-center" style="justify-content:center">Team</div>
+    <h2 class="section-title">The People Behind RiverSense</h2>
+    <p class="section-sub">Six B.Tech IT students combining AI, IoT, GIS and full-stack development to protect the Sabarmati and other rivers.</p>
+
+    <div class="team-grid">
+      {% for member in team %}
+      <div class="team-card">
+        <div class="team-avatar">{{ member.avatar }}</div>
+        <div class="team-name">{{ member.name }}</div>
+        <div class="team-role">{{ member.role }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ALIGNMENT -->
+<section class="section-pad">
+  <div class="container text-center">
+    <div class="section-label" style="justify-content:center">Aligned With</div>
+    <h2 class="section-title">National Mission Alignment</h2>
+    <p class="section-sub">This project directly supports India's flagship environment and urban missions.</p>
+
+    <div class="scale-grid" style="margin-top:2.5rem">
+      <div class="scale-item"><i class="fas fa-city"></i><h4>Smart Cities Mission</h4><p>MoHUA approved smart water monitoring deployment</p></div>
+      <div class="scale-item"><i class="fas fa-tint"></i><h4>AMRUT 2.0</h4><p>Urban water body conservation and rejuvenation</p></div>
+      <div class="scale-item"><i class="fas fa-broom"></i><h4>Swachh Bharat</h4><p>Automated riverfront cleanliness monitoring</p></div>
+      <div class="scale-item"><i class="fas fa-stream"></i><h4>Namami Gange</h4><p>National Mission for Clean Ganga scalability</p></div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

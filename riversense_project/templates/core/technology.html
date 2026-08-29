@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% block title %}Technology — RiverSense
+<!-- FUTURE PLANNING -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-label">Roadmap</div>
+    <h2 class="section-title">Future Planning</h2>
+    <p class="section-sub">Upcoming modules planned for Semester 9 and beyond — expanding RiverSense into a complete smart river ecosystem.</p>
+    <div class="tech-stack-grid">
+      <div class="tech-stack-card" style="border-color:rgba(0,212,164,.25)">
+        <h4><i class="fas fa-mobile-alt" style="color:var(--teal)"></i> Citizen Engagement App</h4>
+        <p>Flutter-based mobile app for citizens to report incidents, view river health scores and receive real-time alerts aligned with Namami Gange.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">Flutter</span><span class="tech-tag">Firebase</span><span class="tech-tag">Sem 9</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(14,165,233,.2)">
+        <h4><i class="fas fa-swimmer" style="color:var(--blue)"></i> Drowning Detection</h4>
+        <p>YOLOv8-pose model to detect humans in distress on the riverfront — providing life-safety monitoring alongside environmental monitoring.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">YOLOv8-pose</span><span class="tech-tag">Post FMP</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(34,197,94,.2)">
+        <h4><i class="fas fa-leaf" style="color:var(--green)"></i> Biodiversity AI</h4>
+        <p>Image classification with iNaturalist API to monitor aquatic wildlife and track ecological health of the Sabarmati river ecosystem.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">Classification</span><span class="tech-tag">iNaturalist</span><span class="tech-tag">Post FMP</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(245,158,11,.2)">
+        <h4><i class="fas fa-tint" style="color:var(--amber)"></i> Full IoT Sensor Deployment</h4>
+        <p>Physical deployment of pH, DO and turbidity hardware sensors with MQTT streaming at all 5 stations. Currently in prototype stage.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">pH Sensor</span><span class="tech-tag">DO Sensor</span><span class="tech-tag">Sem 9</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(168,85,247,.2)">
+        <h4><i class="fas fa-building" style="color:#a855f7"></i> SRFDCL Integration</h4>
+        <p>REST API integration with AMC and SRFDCL operational systems for direct incident dispatch and compliance reporting.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">REST API</span><span class="tech-tag">AMC</span><span class="tech-tag">Industry</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(239,68,68,.2)">
+        <h4><i class="fas fa-globe-asia" style="color:var(--red)"></i> National Scale Deployment</h4>
+        <p>City-agnostic deployment across Kankaria, Vastrapur, Chandola lakes and rivers under NMCG and River Cities Alliance framework.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">NMCG</span><span class="tech-tag">Namami Gange</span><span class="tech-tag">National</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+{% block content %}
+
+<section style="padding: 8rem 5% 4rem; background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,212,164,.07) 0%, transparent 70%);">
+  <div class="container">
+    <div class="section-label">Technology</div>
+    <h1 class="section-title">Built on Cutting-Edge <span class="accent">Open-Source Stack</span></h1>
+    <p class="section-sub">Every component carefully selected for real-world Indian riverfront deployment — scalable, reliable and cost-effective.</p>
+  </div>
+</section>
+
+<!-- YOLOv8 SECTION -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-label">AI / ML Core</div>
+    <h2 class="section-title">Trash Detection</h2>
+    <p class="section-sub">YOLOv8-medium trained on 801 annotated images of River water surface waste over 150 epochs on Tesla T4 GPU.</p>
+
+    <div class="tech-split" style="margin-top:3rem">
+      <div class="tech-list">
+        <div class="tech-item">
+          <div class="tech-item-icon" style="color:var(--teal)"><i class="fas fa-boxes"></i></div>
+          <div>
+            <h4>One Detection Class</h4>
+            <p>Chosen for operational relevance — cleanup crews need density, not taxonomy.</p>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item-icon" style="color:var(--blue)"><i class="fas fa-bolt"></i></div>
+          <div>
+            <h4>Real-Time Inference &lt;50ms</h4>
+            <p>Processes CCTV frames or web cam at 20 FPS on GPU.</p>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item-icon" style="color:var(--amber)"><i class="fas fa-images"></i></div>
+          <div>
+            <h4>Rich Augmentation Pipeline</h4>
+            <p>Mosaic, horizontal flip, HSV shifts, random erasing, MixUp, rotation, blur, CLAHE and more — ensuring robustness to murky water and lighting variation.</p>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item-icon" style="color:var(--green)"><i class="fas fa-map-pin"></i></div>
+          <div>
+            <h4>GPS-Tagged Detections</h4>
+            <p>Each detection inherits GPS coordinates from fixed camera GIS mapping. Events stored in InfluxDB for heatmap rendering.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card">
+        <h3><i class="fas fa-trophy" style="color:var(--amber)"></i> &nbsp;Best Model Performance</h3>
+        <div class="metric-row">
+          <span class="metric-label">mAP@0.5 (Best · Epoch 93)</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="metric-bar"><div class="metric-fill" style="width:84.9%"></div></div>
+            <span class="metric-val val-good">0.849</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">mAP@0.5:0.95</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="metric-bar"><div class="metric-fill" style="width:59.6%"></div></div>
+            <span class="metric-val val-ok">0.596</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Precision (Epoch 133)</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="metric-bar"><div class="metric-fill" style="width:97.3%"></div></div>
+            <span class="metric-val val-good">0.973</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Recall (Epoch 87)</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="metric-bar"><div class="metric-fill" style="width:76.6%"></div></div>
+            <span class="metric-val val-ok">0.766</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Training Images</span>
+          <span class="metric-val">801</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Epochs</span>
+          <span class="metric-val">150 (no early stop)</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">GPU</span>
+          <span class="metric-val">Tesla T4 · 14.9GB</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Training Time</span>
+          <span class="metric-val">~70 minutes</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Model Size</span>
+          <span class="metric-val">49.7 MB</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="section-pad" style="background: var(--navy2); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2);">
+  <div class="container">
+    <div class="section-label">Full Stack</div>
+    <h2 class="section-title">Technology Components</h2>
+
+    <div class="tech-stack-grid">
+      <div class="tech-stack-card">
+        <h4><i class="fas fa-eye" style="color:var(--teal)"></i> Object Detection</h4>
+        <p>YOLOv8m for real-time floating trash detection from CCTV footage or web cam at &lt;50ms/frame.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">YOLOv8m</span><span class="tech-tag">PyTorch 2.10</span><span class="tech-tag">CUDA 12.8</span></div>
+      </div>
+      <div class="tech-stack-card">
+        <h4><i class="fas fa-database" style="color:var(--blue)"></i> Data Storage</h4>
+        <p>InfluxDB for time-series sensor data + PostgreSQL for relational detection events.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">InfluxDB</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">MongoDB</span></div>
+      </div>
+      <div class="tech-stack-card">
+        <h4><i class="fas fa-wifi" style="color:var(--amber)"></i> IoT Pipeline</h4>
+        <p>Arduino sensors stream via MQTT to Node-RED and AWS IoT Core.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">MQTT</span><span class="tech-tag">Node-RED</span><span class="tech-tag">AWS IoT</span></div>
+      </div>
+      <div class="tech-stack-card">
+        <h4><i class="fas fa-server" style="color:var(--green)"></i> Backend API</h4>
+        <p>FastAPI async backend with auto-generated OpenAPI docs. Django for frontend dashboard.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">FastAPI</span><span class="tech-tag">Django</span><span class="tech-tag">Python</span></div>
+      </div>
+      <div class="tech-stack-card">
+        <h4><i class="fas fa-map" style="color:var(--red)"></i> GIS Mapping</h4>
+        <p>GPS-tagged detection events rendered as live pollution heatmaps on interactive maps.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">GIS</span><span class="tech-tag">Leaflet.js</span><span class="tech-tag">Roboflow</span></div>
+      </div>
+      <div class="tech-stack-card">
+        <h4><i class="fas fa-brain" style="color:var(--blue)"></i> Flood Prediction</h4>
+        <p>LSTM neural networks predict water levels 72h ahead using IMD weather API data.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">LSTM</span><span class="tech-tag">IMD API</span><span class="tech-tag">TensorFlow</span></div>
+      </div>
+      <div class="tech-stack-card">
+        <h4><i class="fas fa-cloud" style="color:var(--teal)"></i> Cloud Infrastructure</h4>
+        <p>AWS IoT Core for device management + S3 for model weights and frame storage.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">AWS IoT</span><span class="tech-tag">AWS S3</span><span class="tech-tag">VS Code</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FUTURE PLANNING -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-label">Roadmap</div>
+    <h2 class="section-title">Future Planning</h2>
+    <p class="section-sub">Upcoming modules planned for Future — expanding RiverSense into a complete smart river ecosystem.</p>
+    <div class="tech-stack-grid">
+      <div class="tech-stack-card" style="border-color:rgba(0,212,164,.25)">
+        <h4><i class="fas fa-mobile-alt" style="color:var(--teal)"></i> Citizen Engagement App</h4>
+        <p>Flutter-based mobile app for citizens to report incidents, view river health scores and receive real-time alerts aligned with Namami Gange.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">Flutter</span><span class="tech-tag">Firebase</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(14,165,233,.2)">
+        <h4><i class="fas fa-swimmer" style="color:var(--blue)"></i> Drowning Detection</h4>
+        <p>YOLOv8-pose model to detect humans in distress on the riverfront — providing life-safety monitoring alongside environmental monitoring.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">YOLOv8-pose</span><span class="tech-tag">Post FMP</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(34,197,94,.2)">
+        <h4><i class="fas fa-leaf" style="color:var(--green)"></i> Biodiversity AI</h4>
+        <p>Image classification with iNaturalist API to monitor aquatic wildlife and track ecological health of the Sabarmati river ecosystem.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">Classification</span><span class="tech-tag">iNaturalist</span><span class="tech-tag">Post FMP</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(245,158,11,.2)">
+        <h4><i class="fas fa-tint" style="color:var(--amber)"></i> Full IoT Sensor Deployment</h4>
+        <p>Physical deployment of pH, DO and turbidity hardware sensors with MQTT streaming at all 5 stations. Currently in prototype stage.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">pH Sensor</span><span class="tech-tag">DO Sensor</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(168,85,247,.2)">
+        <h4><i class="fas fa-building" style="color:#a855f7"></i> SRFDCL Integration</h4>
+        <p>REST API integration with AMC and SRFDCL operational systems for direct incident dispatch and compliance reporting.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">REST API</span><span class="tech-tag">AMC</span><span class="tech-tag">Industry</span></div>
+      </div>
+      <div class="tech-stack-card" style="border-color:rgba(239,68,68,.2)">
+        <h4><i class="fas fa-globe-asia" style="color:var(--red)"></i> National Scale Deployment</h4>
+        <p>City-agnostic deployment across Kankaria, Vastrapur, Chandola lakes and rivers under NMCG and River Cities Alliance framework.</p>
+        <div style="margin-top:.8rem"><span class="tech-tag">NMCG</span><span class="tech-tag">Namami Gange</span><span class="tech-tag">National</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
