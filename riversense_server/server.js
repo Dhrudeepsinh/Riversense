@@ -7,7 +7,7 @@
 // // app.use(cors());
 
 // // // MongoDB connection
-// // mongoose.connect("mongodb+srv://admin:admin@cluster0.hthlpbe.mongodb.net/test")
+// // mongoose.connect(process.env.MONGO_URI)
 // // .then(() => console.log("MongoDB Connected"))
 // // .catch(err => console.log(err));
 
@@ -53,7 +53,7 @@
 // app.use(cors());
 
 // // ✅ MongoDB connection
-// mongoose.connect("mongodb+srv://admin:admin@cluster0.hthlpbe.mongodb.net/test")
+// mongoose.connect(process.env.MONGO_URI)
 // .then(() => console.log("MongoDB Connected"))
 // .catch(err => console.log(err));
 
@@ -132,7 +132,7 @@
 // const { SerialPort } = require("serialport");
 // const { ReadlineParser } = require("@serialport/parser-readline");
 
-// mongoose.connect("mongodb+srv://admin:admin@cluster0.hthlpbe.mongodb.net/test")
+// mongoose.connect(process.env.MONGO_URI)
 // .then(() => console.log("MongoDB Connected"));
 
 // const SensorSchema = new mongoose.Schema({
@@ -196,7 +196,7 @@ app.use(express.json());
 app.use(cors());
 
 // ================= MONGODB =================
-mongoose.connect("mongodb+srv://admin:admin@cluster0.hthlpbe.mongodb.net/test")
+mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
 
@@ -317,4 +317,5 @@ app.get("/api/weather", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch weather" });
   }
 });
+
 

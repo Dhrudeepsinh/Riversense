@@ -351,8 +351,9 @@ def about(request):
 
 # fetch turbinity data
 
-MONGO_URI = "mongodb+srv://admin:admin@cluster0.hthlpbe.mongodb.net/?appName=Cluster0"
+MONGO_URI = os.getenv("MONGO_URI")
 
 #mongodb
 from .mongo_utils import get_latest_water_data
+
 
